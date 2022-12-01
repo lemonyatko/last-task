@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./index.ts",
-    "start:prod": "npm run build && node ./dist/index.js",
-    "build": "npx tsc"
+    "start": "nodemon ./index.ts"
   },
   "author": "stanislaw",
   "license": "ISC",

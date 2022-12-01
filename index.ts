@@ -2,7 +2,6 @@ import express, { request, response } from "express";
 import { config } from "./src/config";
 import { connectToDB } from "./src/database";
 import { listingRouter } from "./src/listings/LinstingRouter";
-import { UserMiddleware } from "./src/users/UserMiddleware";
 import { userRouter } from "./src/users/UserRouter";
 
 const app = express();

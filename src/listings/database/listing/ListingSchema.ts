@@ -1,9 +1,10 @@
 import { model, Schema, Types } from "mongoose";
 
 interface IListing {
+    _id: string;
     user: Types.ObjectId;
     title: string;
-    desciption: string;
+    description: string;
 }
 
 const ListingSchema = new Schema<IListing>({
@@ -15,7 +16,7 @@ const ListingSchema = new Schema<IListing>({
         type: String,
         required: true,
     },
-    desciption: {
+    description: {
         type: String,
         required: true,
     }

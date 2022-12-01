@@ -5,7 +5,7 @@ interface IUserDto {
     name: string;
     phone: string;
     userType: string;
-    id: string;
+    _id: string;
 }
 
 class UserDto implements IUserDto {
@@ -13,14 +13,14 @@ class UserDto implements IUserDto {
     name: string;
     phone: string;
     userType: string;
-    id: string;
+    _id: string;
 
     constructor(userData: IUser) {
         this.email = userData.email;
         this.name = userData.name;
         this.phone = userData.phone;
         this.userType = userData.userType;
-        this.id = userData._id;
+        this._id = userData._id;
     }
 }
 
