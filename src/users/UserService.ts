@@ -26,7 +26,7 @@ class UserService {
         const user = await UserRepository.findClientById(id);
         if (!user) return;
 
-        const isCreator = user._id.toString() === id;
+        const isCreator = user._id.toString() === id; //must be replaced with jwt functionality
         const isAdmin = user.userType === "admin";
 
         if (isCreator || isAdmin) {
