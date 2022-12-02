@@ -9,7 +9,7 @@ type userData = {
 }
 class UserService {
     async createUser(userData: userData) {
-        const user = await UserRepository.createUser({ ...userData, userType: "client" });
+        const user = await UserRepository.createUser({ ...userData, userType: "client", isActivated: false });
         const userDto = new UserDto(user);
         return {
             user: userDto

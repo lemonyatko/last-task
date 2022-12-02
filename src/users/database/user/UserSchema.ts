@@ -6,6 +6,7 @@ interface IUser {
     name: string;
     phone: string;
     userType: string;
+    isActivated: boolean;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -26,6 +27,9 @@ const UserSchema = new Schema<IUser>({
     userType: {
         type: String,
         required: true
+    },
+    isActivated: {
+        type: Boolean,
     }
 });
 

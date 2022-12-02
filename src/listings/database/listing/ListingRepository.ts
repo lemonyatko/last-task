@@ -11,24 +11,6 @@ class ListingRepository {
         return await ListingModel.findById(id);
     }
 
-    static async updateListingData(payload: IListingDto) {
-        const listing = await this.findListingById(payload._id);
-
-        if (!listing) return;
-
-        const user = await UserRepository.findClientById(payload.user.toString());
-        if (!user) return;
-
-        const isCreator = listing?.user.toString() === payload.user.toString();
-
-        if (isCreator) {
-            listing.title = payload.title;
-            listing.description = payload.description;
-            return listing.save();
-        }
-        return;
-    }
-
     static async findAllListings() {
         return await ListingModel.find();
     }

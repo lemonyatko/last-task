@@ -6,6 +6,7 @@ interface IUserDto {
     phone: string;
     userType: string;
     _id: string;
+    isActivated: boolean;
 }
 
 class UserDto implements IUserDto {
@@ -14,6 +15,7 @@ class UserDto implements IUserDto {
     phone: string;
     userType: string;
     _id: string;
+    isActivated: boolean;
 
     constructor(userData: IUser) {
         this.email = userData.email;
@@ -21,6 +23,7 @@ class UserDto implements IUserDto {
         this.phone = userData.phone;
         this.userType = userData.userType;
         this._id = userData._id;
+        this.isActivated = userData.isActivated;
     }
 }
 

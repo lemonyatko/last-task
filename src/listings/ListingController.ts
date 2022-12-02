@@ -10,6 +10,7 @@ class ListingController {
         try {
             const { user, title, description }: IListing = req.body;
             const listingData = await ListingService.createListing({ user, title, description });
+            if (!listingData) return res.status(403).json({ message: 'Access denied' });
             return res.json(listingData);
         } catch (err) {
             console.log(err);
@@ -49,7 +50,7 @@ class ListingController {
         if (!isDeleted) {
             return res.status(404).json({ message: "The deletion operation failed" });
         }
-        return res.status(204);
+        return res.status(204).send();
     }
 }
 

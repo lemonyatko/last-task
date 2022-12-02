@@ -9,8 +9,12 @@ type listingData = {
 }
 class ListingService {
     async createListing(listingData: listingData) {
+        const user = await UserRepository.findClientById(listingData.user.toString());
+        if (!user?.isActivated) return;
+
         const listing = await ListingRepository.createListing(listingData);
         const listingDto = new ListingDto(listing);
+
         return {
             listing: listingDto
         };
@@ -23,12 +27,24 @@ class ListingService {
     }
 
     async changeListingData(payload: IListingDto) {
-        const listing = await ListingRepository.updateListingData(payload);
-        if (!listing) return false;
-        const listingDto = new ListingDto(listing);
-        return {
-            listing: listingDto
+        const listing = await ListingRepository.findListingById(payload._id);
+        if (!listing) return;
+
+        const user = await UserRepository.findClientById(payload.user.toString());
+        if (!user) return;
+
+        const isCreator = listing?.user.toString() === payload.user.toString();
+        if (isCreator) {
+            listing.title = payload.title;
+            listing.description = payload.description;
+            listing.save();
+
+            const listingDto = new ListingDto(listing);
+            return {
+                listing: listingDto
+            }
         }
+        return false;
     }
 
     async deleteListingById(userId: string, listingId: string) {

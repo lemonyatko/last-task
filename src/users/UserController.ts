@@ -25,7 +25,7 @@ class UserController {
             if (!isDeleted) {
                 return res.status(404).json({ message: "The deletion operation failed" });
             }
-            return res.status(204);
+            return res.status(204).send();
         } catch (err) {
             console.log(err);
             return res.status(500).json({ message: 'Unexpected error' });
