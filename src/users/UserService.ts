@@ -36,10 +36,6 @@ class UserService {
         }
         return false;
     }
-
-    async sendActivation(userData: IUserDto) {
-        eventsEmitter.emit('signup', userData);
-    }
 }
 
 export default new UserService();

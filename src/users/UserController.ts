@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import TelegrafService from "../telegraf/TelegrafService";
 import { IUser } from "./database/user/UserSchema";
 import UserService from "./UserService";
 
@@ -10,7 +11,7 @@ class UserController {
             if (!isExist) return res.status(400).json("The client already exists");
 
             const userData = await UserService.createUser({ email, name, phone });
-            await UserService.sendActivation(userData.user);
+            await TelegrafService.sendActivation(userData.user);
             return res.json(userData);
         } catch (err) {
             console.log(err);
