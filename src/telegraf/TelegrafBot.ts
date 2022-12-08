@@ -39,11 +39,18 @@ eventsEmitter.on('signup', async (user: IUserDto) => {
     telegraf.bot.action('activate', async ctx => {
         const userData = await UserRepository.findClientById(user._id);
         if (!userData) return;
-        if (userData.isActivated) return ctx.reply("already activated");
+        if (userData.isActivated) return ctx.answerCbQuery("already activated");
         userData.isActivated = true;
         userData.save();
-        return ctx.reply("activated");
-    })
+        await ctx.answerCbQuery("activated");
+        await ctx.editMessageReplyMarkup({
+            inline_keyboard: [
+                [
+                    Markup.button.callback("activated", "activate")
+                ]
+            ]
+        });
+    });
 });
 
 
