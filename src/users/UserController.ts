@@ -10,6 +10,7 @@ class UserController {
             if (!isExist) return res.status(400).json("The client already exists");
 
             const userData = await UserService.createUser({ email, name, phone });
+            await UserService.sendActivation(userData.user);
             return res.json(userData);
         } catch (err) {
             console.log(err);

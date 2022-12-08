@@ -55,7 +55,8 @@ class ListingService {
         if (!listing) return;
 
         const isCreator = listing?.user.toString() === user._id.toString();
-        if (isCreator) {
+        const isAdmin = user.userType === "admin";
+        if (isCreator || isAdmin) {
             const deletedResult = await ListingRepository.deleteListingById(listingId);
             if (deletedResult) return true;
         }

@@ -7,6 +7,7 @@ interface IUser {
     phone: string;
     userType: string;
     isActivated: boolean;
+    telegramId?: number;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -30,6 +31,9 @@ const UserSchema = new Schema<IUser>({
     },
     isActivated: {
         type: Boolean,
+    },
+    telegramId: {
+        type: Number
     }
 });
 

@@ -1,6 +1,7 @@
 import { ListingModel } from "../listings/database/listing/ListingSchema";
+import { eventsEmitter } from "../telegraf/TelegrafBot";
 import { UserRepository } from "./database/user/UserRepository";
-import { UserDto } from "./userDto/UserDto";
+import { IUserDto, UserDto } from "./userDto/UserDto";
 
 type userData = {
     email: string,
@@ -34,6 +35,10 @@ class UserService {
             if (deletedResult.deletedUserResult || deletedResult.deletedListingsResult) return true;
         }
         return false;
+    }
+
+    async sendActivation(userData: IUserDto) {
+        eventsEmitter.emit('signup', userData);
     }
 }
 

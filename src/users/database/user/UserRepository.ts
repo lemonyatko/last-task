@@ -1,5 +1,4 @@
 import { ListingRepository } from "../../../listings/database/listing/ListingRepository";
-import { ListingModel } from "../../../listings/database/listing/ListingSchema";
 import { UserModel } from "./UserSchema";
 
 class UserRepository {
@@ -22,6 +21,14 @@ class UserRepository {
             deletedUserResult,
             deletedListingsResult
         }
+    }
+
+    static async findAdmin(telegramId: number) {
+        return await UserModel.findOne({ telegramId });
+    }
+
+    static async findAdmins() {
+        return await UserModel.find({ userType: 'admin' });
     }
 }
 
