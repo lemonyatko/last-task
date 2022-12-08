@@ -17,11 +17,6 @@ class TelegrafBot {
     }
 
     setup() {
-        this.bot.use(async (ctx, next) => {
-            console.log(ctx);
-            return next();
-        })
-
         this.bot.start((ctx) => ctx.reply('Welcome'));
         return this.bot;
     }
