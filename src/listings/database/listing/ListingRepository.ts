@@ -1,5 +1,3 @@
-import { UserRepository } from "../../../users/database/user/UserRepository";
-import { IListingDto } from "../../listingDto/ListingDto";
 import { ListingModel } from "./ListingSchema";
 
 class ListingRepository {

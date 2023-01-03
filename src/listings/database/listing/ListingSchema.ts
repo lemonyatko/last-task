@@ -1,8 +1,8 @@
-import { model, Schema, Types } from "mongoose";
+import { model, Schema } from "mongoose";
 
 interface IListing {
     _id: string;
-    user: Types.ObjectId;
+    user: Schema.Types.ObjectId | string;
     title: string;
     description: string;
 }

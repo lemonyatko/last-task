@@ -3,13 +3,13 @@ import { ListingRepository } from "./database/listing/ListingRepository";
 import { IListingDto, ListingDto } from "./listingDto/ListingDto";
 
 type listingData = {
-    user: object,
+    user: string,
     title: string,
     description: string
 }
 class ListingService {
     async createListing(listingData: listingData) {
-        const user = await UserRepository.findClientById(listingData.user.toString());
+        const user = await UserRepository.findClientById(listingData.user);
         if (!user?.isActivated) return;
 
         const listing = await ListingRepository.createListing(listingData);
@@ -18,12 +18,6 @@ class ListingService {
         return {
             listing: listingDto
         };
-    }
-
-    async checkExistance(id: string) {
-        const listing = await ListingRepository.findListingById(id);
-        if (!listing) return false;
-        return true;
     }
 
     async changeListingData(payload: IListingDto) {
@@ -37,7 +31,7 @@ class ListingService {
         if (isCreator) {
             listing.title = payload.title;
             listing.description = payload.description;
-            listing.save();
+            await listing.save();
 
             const listingDto = new ListingDto(listing);
             return {

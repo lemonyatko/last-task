@@ -30,6 +30,14 @@ class UserRepository {
     static async findAdmins() {
         return await UserModel.find({ userType: 'admin' });
     }
+
+    static async findSubscribedUsers() {
+        return await UserModel.find({ subscribed: true, userType: 'client' });
+    }
+
+    static async findOneClient(link: string) {
+        return await UserModel.findOne({ subscribeLink: link });
+    }
 }
 
 export { UserRepository };

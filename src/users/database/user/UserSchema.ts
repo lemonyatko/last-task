@@ -1,13 +1,16 @@
 import { model, Schema } from "mongoose";
 
 interface IUser {
-    _id: string;
+    _id: Schema.Types.ObjectId;
     email: string;
     name: string;
+    password: string;
     phone: string;
     userType: string;
     isActivated: boolean;
-    telegramId?: number;
+    telegramId: string;
+    subscribed: boolean;
+    subscribeLink: string;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -16,6 +19,10 @@ const UserSchema = new Schema<IUser>({
         required: true,
         unique: true,
         lowercase: true
+    },
+    password: {
+        type: String,
+        required: true,
     },
     name: {
         type: String,
@@ -33,7 +40,14 @@ const UserSchema = new Schema<IUser>({
         type: Boolean,
     },
     telegramId: {
-        type: Number
+        type: String
+    },
+    subscribed: {
+        type: Boolean,
+        required: true
+    },
+    subscribeLink: {
+        type: String
     }
 });
 
