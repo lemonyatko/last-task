@@ -21,7 +21,7 @@ class ApiError extends Error {
     }
 
     static NotFound() {
-        return new ApiError(404, 'The deletion operation failed');
+        return new ApiError(404, 'Such record ain\'t found');
     }
 }
 
