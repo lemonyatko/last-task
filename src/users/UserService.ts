@@ -2,7 +2,7 @@ import { compare, hash } from "bcrypt";
 import { randomUUID } from "crypto";
 import TokenService from "../token/TokenService";
 import { UserRepository } from "./database/user/UserRepository";
-import { IUserDto, UserDto } from "./userDto/UserDto";
+import { UserDto } from "./userDto/UserDto";
 
 type userData = {
     email: string,
@@ -21,8 +21,8 @@ class UserService {
         const user = await UserRepository.createUser({ ...userData, userType: "client", isActivated: false, subscribed: false, telegramId: null, subscribeLink });
         const userDto = new UserDto(user);
 
-        const tokens = TokenService.generateTokens({ userId: userDto._id });
-        await TokenService.saveToken(userDto._id, tokens.refreshToken);
+        const tokens = TokenService.generateTokens({ userId: userDto._id }); //only for debug
+        await TokenService.saveToken(userDto._id, tokens.refreshToken); //only for debug
         return {
             ...tokens,
             user: userDto
@@ -30,7 +30,7 @@ class UserService {
     }
 
     async signin(email: string, password: string) {
-        const user = await UserRepository.findClientByEmail(email);
+        const user = await UserRepository.findUserByEmail(email);
         if (!user) return;
 
         const isPasswordsEqual = await compare(password, user.password);
@@ -54,7 +54,7 @@ class UserService {
         const refreshTokenFromDB = await TokenService.findRefreshToken(refreshToken);
         if (!userData || !refreshTokenFromDB) return;
 
-        const user = await UserRepository.findClientById(userData.userId);
+        const user = await UserRepository.findUserById(userData.userId);
         if (!user) return 'false';
         const userDto = new UserDto(user);
         const tokens = TokenService.generateTokens({ userId: userDto._id });
@@ -65,13 +65,13 @@ class UserService {
     }
 
     async checkExistence(email: string) {
-        const client = await UserRepository.findClientByEmail(email);
-        if (client) return true;
-        return false;
+        const client = await UserRepository.findUserByEmail(email);
+        if (client) return !!client;
+        return !client;
     }
 
     async deleteAllUserData(userIdFromJWT: string, userId: string) {
-        const user = await UserRepository.findClientById(userIdFromJWT);
+        const user = await UserRepository.findUserById(userIdFromJWT);
         if (!user) return;
 
         const isCreator = user._id.toString() === userId;

@@ -5,6 +5,7 @@ interface IListing {
     user: Schema.Types.ObjectId | string;
     title: string;
     description: string;
+    images: Schema.Types.ObjectId[];
 }
 
 const ListingSchema = new Schema<IListing>({
@@ -19,7 +20,8 @@ const ListingSchema = new Schema<IListing>({
     description: {
         type: String,
         required: true,
-    }
+    },
+    images: [{ type: Schema.Types.ObjectId, ref: 'Images' }]
 });
 
 const ListingModel = model<IListing>('Listing', ListingSchema);

@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { config } from "../config";
 import { ApiError } from "../exceptions/Errors";
 import TelegrafService from "../telegraf/TelegrafService";
 import TokenService from "../token/TokenService";
@@ -14,7 +13,8 @@ class UserController {
             const userData = await UserService.signup({ email, name, phone, password });
             if (!userData) throw ApiError.BadRequest("The client already exists");
             await TelegrafService.sendActivation(userData.user);
-            return res.json(userData);
+            return res.json(userData); //for debug
+            // return res.status(200);
         } catch (err) {
             console.log(err);
             next(err);

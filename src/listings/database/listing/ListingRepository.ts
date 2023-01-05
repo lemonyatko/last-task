@@ -1,24 +1,42 @@
-import { ListingModel } from "./ListingSchema";
+import { Document } from "mongoose";
+import { listingData } from "../../ListingService";
+import { ImagesRepository } from "../images/ImagesRepository";
+import { IListing, ListingModel } from "./ListingSchema";
 
+type listing = Document<unknown, any, IListing> & IListing & Required<{
+    _id: string;
+}>
 class ListingRepository {
-    static async createListing(listingData: object) {
-        return await ListingModel.create(listingData);
+    static async create(listingData: listingData) {
+
+        const images = await Promise.all(listingData.images.map(image => ImagesRepository.createImagesForListing(image)));
+        return await ListingModel.create({ ...listingData, images });
     }
 
-    static async findListingById(id: string) {
+    static async findById(id: string) {
         return await ListingModel.findById(id);
     }
 
-    static async findAllListings() {
+    static async findAll() {
         return await ListingModel.find();
     }
 
-    static async deleteAllListings(id: string) {
+    static async deleteAllByUserId(id: string) {
         return await ListingModel.deleteMany({ user: id });
     }
 
-    static async deleteListingById(id: string) {
+    static async deleteById(id: string) {
         return await ListingModel.findByIdAndDelete(id);
+    }
+
+    static async findAllAndPopulate() {
+        return await ListingModel.find().populate('images');
+    }
+
+    static async updateData(listing: listing, title: string, description: string) {
+        listing.title = title;
+        listing.description = description;
+        await listing.save();
     }
 }
 

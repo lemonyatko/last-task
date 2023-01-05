@@ -4,7 +4,6 @@ import { UserRepository } from "../users/database/user/UserRepository";
 import { IUserDto } from "../users/userDto/UserDto";
 import EventEmitter from "events";
 import { IListingDto } from "../listings/listingDto/ListingDto";
-import { text } from "stream/consumers";
 
 class TelegrafBot {
     bot = new Telegraf(config.BOT_TOKEN);
@@ -28,12 +27,11 @@ class TelegrafBot {
         this.bot.start(async (ctx) => {
             if (ctx.message.text.length > '/start'.length) {
                 const link = this.extractUniqueLink(ctx.message.text);
-                const user = await UserRepository.findOneClient(link);
+                const user = await UserRepository.findUser(link);
                 if (!user) return;
 
-                user.telegramId = ctx.from.id.toString();
-                user.subscribed = true;
-                await user.save();
+                const telegramId = ctx.from.id.toString();
+                await UserRepository.subscribeUser(user, telegramId);
             }
             ctx.reply('Welcome');
         });
@@ -51,11 +49,10 @@ eventsEmitter.on('signup', async (user: IUserDto) => {
     });
 
     telegraf.bot.action('activate', async ctx => {
-        const userData = await UserRepository.findClientById(user._id);
+        const userData = await UserRepository.findUserById(user._id);
         if (!userData) return;
         if (userData.isActivated) return ctx.answerCbQuery("already activated");
-        userData.isActivated = true;
-        await userData.save();
+        await UserRepository.activateUser(userData);
         await ctx.answerCbQuery("activated");
         await ctx.editMessageReplyMarkup({
             inline_keyboard: [
