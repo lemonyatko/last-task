@@ -8,5 +8,7 @@ export const config = {
     SMTP_HOST: "",
     SMTP_PORT: 0,
     SMTP_USER: "",
-    SMTP_PASSWORD: ""
+    SMTP_PASSWORD: "",
+    API_URL: "http://localhost:5000",
+    API_ACTIVATE_URL: "http://localhost:5000/api/activate/"
 }

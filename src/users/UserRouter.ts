@@ -7,5 +7,6 @@ userRouter.post('/signin', UserController.signin);
 userRouter.post('/logout', UserController.logout);
 userRouter.get('/refresh', UserController.refresh);
 userRouter.delete('/user', UserController.deleteUserAndListings);
+userRouter.get('/activate/:link', UserController.activate);
 
 export { userRouter };

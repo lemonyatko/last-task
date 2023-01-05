@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ApiError } from "../exceptions/Errors";
+import MailService from "../mail/MailService";
 import TelegrafService from "../telegraf/TelegrafService";
 import TokenService from "../token/TokenService";
 import { IUser } from "./database/user/UserSchema";
@@ -13,6 +14,7 @@ class UserController {
             const userData = await UserService.signup({ email, name, phone, password });
             if (!userData) throw ApiError.BadRequest("The client already exists");
             await TelegrafService.sendActivation(userData.user);
+            await MailService.sendActivationMail(userData.user.email, userData.user._id);
             return res.json(userData); //for debug
             // return res.status(200);
         } catch (err) {
@@ -85,6 +87,17 @@ class UserController {
         const userDataFromJWT = TokenService.validateAccessToken(accessToken);
         if (!userDataFromJWT) throw ApiError.UnauthorizedError();
         return userDataFromJWT.userId;
+    }
+
+    async activate(req: Request, res: Response, next: NextFunction) {
+        try {
+            const activationLink = req.params.link;
+            const result = await UserService.activate(activationLink);
+            if (!result) throw ApiError.BadRequest("Wrong activation link");
+            return res.redirect('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+        } catch (err) {
+            next(err)
+        }
     }
 }
 

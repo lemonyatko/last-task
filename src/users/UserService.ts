@@ -13,7 +13,7 @@ type userData = {
 class UserService {
     async signup(userData: userData) {
         const isExist = await this.checkExistence(userData.email);
-        if (isExist) return;
+        if (!isExist) return;
 
         const hashedPassword = await hash(userData.password, 3);
         userData.password = hashedPassword;
@@ -82,6 +82,13 @@ class UserService {
             if (deletedResult.deletedUserResult || deletedResult.deletedListingsResult) return true;
         }
         return false;
+    }
+
+    async activate(link: string) {
+        const user = await UserRepository.findUserById(link);
+        if (!user) return !!user;
+        await UserRepository.activateUser(user);
+        return !!user;
     }
 }
 
